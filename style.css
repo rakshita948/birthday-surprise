@@ -1,0 +1,2011 @@
+/* ==========================================================================
+   Friendship Scrapbook Stylesheet - Core Styles, Layouts, Themes, and Animations
+   ========================================================================== */
+
+/* 1. Global Reset & Base Variables */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root[data-theme="light"] {
+    --bg-gradient-1: #FFF5F5; /* Romantic soft cream-pink */
+    --bg-gradient-2: #F3E8FF; /* Lavender mist */
+    --bg-gradient-3: #E0E7FF; /* Ice blue highlight */
+    --text-primary: #3C2E59; /* Rich purple-slate */
+    --text-secondary: #6D28D9; /* Deep violet */
+    --text-muted: #8B5CF6; /* Soft orchid */
+    --accent-color: #EC4899; /* Vibrant rose */
+    --accent-glow: rgba(236, 72, 153, 0.35);
+    
+    --card-bg: rgba(255, 255, 255, 0.45);
+    --card-border: rgba(255, 255, 255, 0.5);
+    --shadow-color: rgba(219, 39, 119, 0.08);
+    --shadow-hover: rgba(219, 39, 119, 0.18);
+    
+    --btn-bg: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+    --btn-text: #FFFFFF;
+    
+    --progress-bg: rgba(0, 0, 0, 0.05);
+    --progress-fill: linear-gradient(90deg, #EC4899 0%, #8B5CF6 100%);
+    
+    --envelope-color: #FFE4E6;
+    --envelope-inside: #FDA4AF;
+    --paper-color: #FFFFFF;
+}
+
+:root[data-theme="dark"] {
+    --bg-gradient-1: #09041A; /* Deep cosmic purple */
+    --bg-gradient-2: #120924; /* Night plum */
+    --bg-gradient-3: #080D24; /* Midnight indigo */
+    --text-primary: #FCE7F3; /* Pastel pink tint */
+    --text-secondary: #D8B4FE; /* Soft lavender */
+    --text-muted: #A78BFA;
+    --accent-color: #F472B6; /* Hot neon-pink */
+    --accent-glow: rgba(244, 114, 182, 0.45);
+    
+    --card-bg: rgba(26, 18, 48, 0.65);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(139, 92, 246, 0.18);
+    --shadow-hover: rgba(244, 114, 182, 0.28);
+    
+    --btn-bg: linear-gradient(135deg, #F472B6 0%, #A78BFA 100%);
+    --btn-text: #09041A;
+    
+    --progress-bg: rgba(255, 255, 255, 0.08);
+    --progress-fill: linear-gradient(90deg, #F472B6 0%, #A78BFA 100%);
+    
+    --envelope-color: #2D1B4E;
+    --envelope-inside: #1D0E36;
+    --paper-color: #2A1F46;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-gradient-3) 100%);
+    background-attachment: fixed;
+    transition: background 0.8s ease, color 0.5s ease;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
+
+/* 2. Loading Screen */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-gradient-1);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.heart-loader {
+    font-size: 5rem;
+    animation: heartBeatLoader 1.2s infinite ease-in-out;
+    display: inline-block;
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+@keyframes heartBeatLoader {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.15); }
+    45% { transform: scale(1.05); }
+    70% { transform: scale(1.2); }
+}
+
+.loader-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* 3. Background Particles Canvas */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 4. Floating Global Controls */
+.floating-controls {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+    z-index: 200;
+}
+
+.floating-btn {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    box-shadow: 0 8px 32px var(--shadow-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 0 20px var(--accent-glow);
+    border-color: var(--accent-color);
+}
+
+.floating-btn:active {
+    transform: scale(0.95);
+}
+
+.floating-btn .music-tooltip {
+    position: absolute;
+    top: 100%;
+    margin-top: 0.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 8px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.floating-btn:hover .music-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.music-btn.playing .music-icon {
+    animation: rotateNote 3s linear infinite;
+    display: inline-block;
+}
+
+@keyframes rotateNote {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 5. Easter Egg Hearts */
+.easter-egg-heart {
+    position: fixed;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    z-index: 15;
+    opacity: 0.35;
+    transition: all 0.3s ease;
+}
+
+.easter-egg-heart:hover {
+    opacity: 1;
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 5px var(--accent-color));
+}
+
+/* 6. Hero Landing Section */
+.hero-section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+    padding: 1.5rem;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+}
+
+.hero-section.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.glass-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 32px var(--shadow-color);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    transition: all 0.5s ease;
+}
+
+.hero-content {
+    max-width: 600px;
+    padding: 3.5rem 2.5rem;
+    animation: heroEntrance 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes heroEntrance {
+    0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hero-heart-pulse {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+    animation: pulseHeart 2s infinite ease-in-out;
+    display: inline-block;
+}
+
+@keyframes pulseHeart {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px var(--accent-glow)); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--accent-color)); }
+}
+
+.hero-title {
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 2.8rem;
+    font-weight: 500;
+}
+
+/* Primary Glowing Buttons */
+.glowing-btn {
+    position: relative;
+    padding: 1.1rem 2.6rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+    color: var(--btn-text);
+    background: var(--btn-bg);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--accent-glow);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    z-index: 5;
+}
+
+.glowing-btn span {
+    position: relative;
+    z-index: 2;
+}
+
+.glowing-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--text-secondary) 0%, var(--accent-color) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+.glowing-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 35px var(--accent-color);
+}
+
+.glowing-btn:hover::before {
+    opacity: 1;
+}
+
+.glowing-btn:active {
+    transform: scale(0.98);
+}
+
+/* Secondary Action Buttons */
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 0.75rem 1.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.secondary-btn:hover {
+    transform: translateY(-2px);
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-color: transparent;
+    box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.secondary-btn:active {
+    transform: translateY(1px);
+}
+
+/* 7. Main Layout */
+.main-content {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 5rem 1.5rem;
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.main-content.hidden {
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Scrapbook Cover & Counter */
+.scrapbook-cover {
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    animation: slideDown 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes slideDown {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.cover-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.counter-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.counter-val {
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.awards-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.award-pill {
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--text-secondary);
+    border: 1px solid rgba(236, 72, 153, 0.25);
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+/* Timeline Navigation Tracker */
+.timeline-nav {
+    position: relative;
+    margin: 2rem 0 1rem 0;
+    width: 100%;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 1.1rem;
+    left: 8.33%;
+    width: 83.33%;
+    height: 3px;
+    background: var(--progress-bg);
+    z-index: 1;
+}
+
+.timeline-steps {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-step {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    outline: none;
+    font-family: inherit;
+}
+
+.step-num {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--paper-color);
+    border: 3px solid var(--card-border);
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+.step-title {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: color 0.4s ease;
+}
+
+/* Active Timeline States */
+.timeline-step.active .step-num {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--btn-text);
+    box-shadow: 0 0 15px var(--accent-glow);
+    transform: scale(1.1);
+}
+
+.timeline-step.active .step-title {
+    color: var(--accent-color);
+}
+
+/* Unlocked (completed) step */
+.timeline-step.unlocked .step-num {
+    background: var(--text-secondary);
+    border-color: var(--text-secondary);
+    color: #FFFFFF;
+}
+
+.timeline-step.unlocked .step-title {
+    color: var(--text-secondary);
+}
+
+/* Locked step */
+.timeline-step.locked .step-num {
+    opacity: 0.6;
+    background: var(--progress-bg);
+}
+
+.timeline-step.locked button {
+    cursor: not-allowed;
+}
+
+/* 8. Chapter Page Transition Panes */
+.chapters-container {
+    position: relative;
+    width: 100%;
+}
+
+.chapter-pane {
+    position: relative;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
+    display: none;
+}
+
+.chapter-pane.active {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.chapter-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.chapter-index {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+.chapter-header h3 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0.3rem 0;
+}
+
+.chapter-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+/* 9. CHAPTER 1: GUESS WHO WIDGET */
+.guess-who-widget {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.guess-photo-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--card-border);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.guess-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 1s ease;
+}
+
+.blurred-image {
+    filter: blur(24px) contrast(0.8);
+}
+
+.guess-controls {
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.guess-prompt-text {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.guess-caption-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    line-height: 1.3;
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.guess-buttons {
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.widget-progress {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-top: 1px solid var(--card-border);
+    padding-top: 1rem;
+}
+
+/* Image Placeholder for missing files */
+.img-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-gradient-2) 0%, var(--bg-gradient-3) 100%);
+    padding: 1.5rem;
+}
+
+.placeholder-icon {
+    font-size: 3rem;
+    margin-bottom: 0.6rem;
+    animation: floatCard 4s infinite ease-in-out;
+}
+
+.placeholder-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    word-break: break-all;
+}
+
+/* 10. CHAPTER 2: MEMORY GALLERY */
+.gallery-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    margin-bottom: 3rem;
+}
+
+/* Photo Booth Strip */
+.photobooth-container {
+    padding: 1.5rem 1.2rem;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    transform: rotate(-3deg);
+}
+
+:root[data-theme="dark"] .photobooth-container {
+    background: #181230;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.photobooth-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.photobooth-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: #111;
+    padding: 0.8rem;
+    border-radius: 4px;
+}
+
+.strip-item {
+    aspect-ratio: 1.1;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #222;
+}
+
+.strip-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photobooth-marker {
+    margin-top: 1rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+}
+
+/* Polaroids Grid */
+.polaroids-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.polaroid-card {
+    background: #FFFFFF;
+    padding: 1rem 1rem 1.8rem 1rem;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+:root[data-theme="dark"] .polaroid-card {
+    background: #20173D;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Hanging tape effect on Polaroids */
+.polaroid-card::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 25px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Rotate Polaroids for organic messy look */
+.polaroid-card:nth-child(3n+1) { transform: rotate(-2deg); }
+.polaroid-card:nth-child(3n+2) { transform: rotate(1.5deg); }
+.polaroid-card:nth-child(3n) { transform: rotate(-1deg); }
+
+.polaroid-card:hover {
+    transform: scale(1.04) rotate(0deg) translateY(-5px);
+    box-shadow: 0 16px 36px var(--shadow-hover);
+    z-index: 5;
+}
+
+.polaroid-img-wrapper {
+    aspect-ratio: 1;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+    background: #EEE;
+    position: relative;
+}
+
+.polaroid-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.polaroid-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    text-align: center;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Scratch card promotion banner */
+.scratch-card-promo {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.promo-text-side h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.promo-text-side p {
+    color: var(--text-muted);
+}
+
+.section-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+/* 11. CHAPTER 3: QUIZ CONTAINER */
+.quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quiz-q-num {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+    margin-bottom: 0.6rem;
+}
+
+.quiz-q-text {
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.quiz-opt-btn {
+    background: var(--paper-color);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    text-align: left;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+
+.quiz-opt-btn:hover {
+    transform: translateX(5px);
+    border-color: var(--accent-color);
+    box-shadow: 0 6px 18px var(--shadow-hover);
+}
+
+.quiz-opt-btn.correct {
+    background: #10B981 !important; /* Green */
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+}
+
+.quiz-opt-btn.incorrect {
+    background: #EF4444 !important; /* Red */
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+}
+
+.quiz-feedback {
+    margin-top: 1.5rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.quiz-feedback p {
+    font-weight: 600;
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+/* Score view slide */
+.quiz-score-view {
+    text-align: center;
+    animation: heroEntrance 0.8s ease forwards;
+}
+
+.score-stars {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-score-view h4 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.quiz-congrats-text {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* 12. CHAPTER 4: WHY YOU'RE AMAZING (CARD GRID) */
+.grid-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.grid-progress-bar-wrapper {
+    flex: 1;
+    min-width: 250px;
+}
+
+.progress-details {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.grid-progress-track {
+    height: 0.6rem;
+    background: var(--progress-bg);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.grid-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--progress-fill);
+    box-shadow: 0 0 10px var(--accent-glow);
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Flip Cards mechanics */
+.card-container {
+    perspective: 1000px;
+    height: 170px;
+    animation: floatCard 5s ease-in-out infinite;
+    transform-style: preserve-3d;
+}
+
+.card-container:nth-child(3n+1) { animation-delay: -1s; animation-duration: 4.8s; }
+.card-container:nth-child(3n+2) { animation-delay: -2.5s; animation-duration: 5.4s; }
+.card-container:nth-child(3n) { animation-delay: -4s; animation-duration: 6s; }
+
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-7px); }
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+    cursor: pointer;
+}
+
+.card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 6px 20px var(--shadow-color);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.card-front {
+    background: var(--card-bg);
+}
+
+.card-front:hover {
+    box-shadow: 0 12px 30px var(--shadow-hover);
+    border-color: var(--accent-color);
+}
+
+.card-front-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.6rem;
+    animation: heartThrob 1.8s infinite ease-in-out;
+}
+
+@keyframes heartThrob {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.card-front-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.card-front-prompt {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+}
+
+.card-back {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    transform: rotateY(180deg);
+    border-color: transparent;
+    justify-content: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.card-back::-webkit-scrollbar {
+    display: none;
+}
+
+.card-back-number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
+}
+
+.card-back-message {
+    font-family: 'Caveat', cursive;
+    font-size: 1.45rem;
+    line-height: 1.25;
+}
+
+/* 13. CHAPTER 5: SECRET LETTERS (ENVELOPE SYSTEM) */
+.envelopes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 2.5rem;
+    padding-top: 2rem;
+}
+
+.envelope-wrapper {
+    perspective: 1000px;
+    height: 180px;
+    position: relative;
+    cursor: pointer;
+}
+
+.envelope-wrapper:hover .envelope-front-pocket {
+    box-shadow: 0 15px 35px var(--shadow-hover);
+}
+
+/* Flat-3D simulated pocket envelope */
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--envelope-color);
+    border-radius: 12px;
+    overflow: visible; /* Need letter to stick out */
+    box-shadow: 0 8px 24px var(--shadow-color);
+    border: 1px solid var(--card-border);
+}
+
+/* Top folding flap */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 105px solid transparent;
+    border-right: 105px solid transparent;
+    border-top: 75px solid var(--envelope-inside);
+    transform-origin: top;
+    transition: transform 0.5s ease, z-index 0.5s ease;
+    z-index: 5;
+    border-radius: 4px;
+}
+
+.envelope-wrapper.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1; /* flip behind back */
+}
+
+/* Letter inside */
+.envelope-paper {
+    position: absolute;
+    bottom: 5px;
+    left: 5%;
+    width: 90%;
+    height: 80%;
+    background: var(--paper-color);
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+}
+
+.paper-preview-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.envelope-wrapper.open .envelope-paper {
+    transform: translateY(-50%) scale(1.03);
+    z-index: 4; /* slides above pocket */
+}
+
+/* Front Cover Pocket Overlay */
+.envelope-front-pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: var(--envelope-color);
+    z-index: 3;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.envelope-stamp {
+    font-size: 1.8rem;
+    animation: floatCard 3.5s infinite ease-in-out;
+}
+
+.envelope-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+}
+
+/* 14. CHAPTER 6: BIRTHDAY CAKE CLIMAX */
+.cake-arena {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cake-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin-bottom: 2rem;
+}
+
+.cake-plate {
+    position: absolute;
+    bottom: 0;
+    width: 280px;
+    height: 18px;
+    background: #E2E8F0;
+    border-radius: 20px;
+    left: -15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="dark"] .cake-plate {
+    background: #3B3463;
+}
+
+.cake-body-bottom {
+    position: absolute;
+    bottom: 18px;
+    left: 25px;
+    width: 200px;
+    height: 80px;
+    background: #F472B6; /* Pink cake */
+    border-radius: 12px 12px 4px 4px;
+    box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.05);
+}
+
+.cake-body-top {
+    position: absolute;
+    bottom: 98px;
+    left: 50px;
+    width: 150px;
+    height: 70px;
+    background: #A78BFA; /* Purple cake top */
+    border-radius: 10px 10px 4px 4px;
+    box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.05);
+}
+
+.cake-frosting {
+    position: absolute;
+    bottom: 90px;
+    left: 20px;
+    width: 210px;
+    height: 18px;
+    background: #FFFFFF; /* White cream line */
+    border-radius: 20px;
+}
+
+.candles-row {
+    position: absolute;
+    bottom: 165px;
+    left: 60px;
+    width: 130px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 60px;
+}
+
+.candle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.3s ease;
+}
+
+.candle:hover {
+    transform: scaleY(1.1);
+}
+
+.candle-stick {
+    width: 8px;
+    height: 40px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.color-1 { background: linear-gradient(to right, #60A5FA, #3B82F6); }
+.color-2 { background: linear-gradient(to right, #F87171, #EF4444); }
+.color-3 { background: linear-gradient(to right, #FCD34D, #F59E0B); }
+
+.wick {
+    width: 2px;
+    height: 6px;
+    background: #4A5568;
+}
+
+.flame {
+    width: 12px;
+    height: 20px;
+    background: radial-gradient(ellipse at bottom, #FFF3B0 0%, #FF8D29 50%, #FF3D3D 100%);
+    border-radius: 50% 50% 20% 20%;
+    margin-bottom: -1px;
+    animation: flicker 1.5s infinite alternate ease-in-out;
+}
+
+.flame.glow {
+    box-shadow: 0 0 12px #FF8D29, 0 0 20px rgba(255, 141, 41, 0.4);
+}
+
+.candle.extinguished .flame {
+    display: none;
+}
+
+@keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(-1deg); filter: brightness(1); }
+    50% { transform: scale(1.08) rotate(1.5deg); filter: brightness(1.2); }
+}
+
+.cake-instructions {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-align: center;
+}
+
+/* Typing Message Card */
+.final-climax-card {
+    max-width: 650px;
+    margin: 3rem auto 0 auto;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    border-color: var(--accent-color);
+    animation: revealClimaxCard 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes revealClimaxCard {
+    0% { opacity: 0; transform: scale(0.9) translateY(40px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.climax-header {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.typewriter-area {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.25rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    text-align: center;
+    color: var(--text-primary);
+    font-weight: 550;
+    min-height: 180px;
+}
+
+.climax-sparkles-accent {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    animation: pulseHeart 2s infinite ease;
+}
+
+/* 15. MODAL STYLINGS (LIGHTBOX, LETTERS, SCRATCH CARD, EASTER EGG) */
+.lightbox-modal, .letter-modal, .scratch-modal-overlay, .egg-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 4, 26, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.lightbox-modal:not(.hidden),
+.letter-modal:not(.hidden),
+.scratch-modal-overlay:not(.hidden),
+.egg-modal-overlay:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-content, .letter-paper, .scratch-card-box, .egg-card {
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+
+.lightbox-modal:not(.hidden) .lightbox-content,
+.letter-modal:not(.hidden) .letter-paper,
+.scratch-modal-overlay:not(.hidden) .scratch-card-box,
+.egg-modal-overlay:not(.hidden) .egg-card {
+    transform: scale(1);
+}
+
+/* Polaroid Lightbox Layout */
+.lightbox-close, .letter-close, .scratch-close, .egg-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2.2rem;
+    color: #FFFFFF;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.lightbox-close:hover, .letter-close:hover, .scratch-close:hover, .egg-close:hover {
+    color: var(--accent-color);
+}
+
+.polaroid-keepsake {
+    background: #FFFFFF;
+    padding: 1.5rem 1.5rem 2.2rem 1.5rem;
+    border-radius: 4px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+:root[data-theme="dark"] .polaroid-keepsake {
+    background: #20173D;
+    border-color: rgba(255,255,255,0.06);
+}
+
+.keepsake-image-wrapper {
+    aspect-ratio: 1.1;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #F7FAFC;
+}
+
+.keepsake-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.keepsake-meta {
+    margin-top: 1.2rem;
+    text-align: center;
+}
+
+.keepsake-location {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.keepsake-caption {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0.2rem 0 0.5rem 0;
+}
+
+.keepsake-note {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--accent-color);
+    line-height: 1.2;
+}
+
+.keepsake-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+/* Unfolded Letter Modal */
+.letter-paper {
+    max-width: 500px;
+    width: 100%;
+    padding: 3.5rem 2.5rem;
+    background: #FFFDF9; /* Warm paper color */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    color: #4A3E3D;
+}
+
+:root[data-theme="dark"] .letter-paper {
+    background: #2E2549;
+    color: #FCE7F3;
+}
+
+.letter-close {
+    color: var(--text-muted);
+}
+
+.letter-subject {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.letter-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.letter-body {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    margin-bottom: 2rem;
+}
+
+.letter-signature {
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    text-align: right;
+}
+
+/* Digital Scratch Card Modal */
+.scratch-card-box {
+    max-width: 380px;
+    width: 100%;
+    padding: 2.5rem 2rem;
+    text-align: center;
+}
+
+.scratch-close { color: var(--text-muted); }
+
+.scratch-card-box h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.scratch-card-box p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.scratch-canvas-container {
+    position: relative;
+    width: 280px;
+    height: 150px;
+    margin: 0 auto 1.5rem auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: #FFF;
+    border: 1px solid var(--card-border);
+}
+
+.scratch-secret-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: #FFF3F7;
+    color: #DB2777;
+    z-index: 1;
+}
+
+.coupon-banner {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+#scratch-coupon-code {
+    font-size: 1.25rem;
+    font-weight: 750;
+    margin: 0.2rem 0;
+    text-transform: uppercase;
+}
+
+.coupon-sub {
+    font-size: 0.75rem;
+    color: #EC4899;
+    font-weight: 600;
+}
+
+#scratch-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    cursor: crosshair;
+}
+
+.scratch-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* Easter Egg Modal */
+.egg-card {
+    max-width: 380px;
+    width: 100%;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-color: var(--accent-color);
+}
+
+.egg-close { color: var(--text-muted); }
+
+.egg-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: pulseHeart 1.5s infinite;
+}
+
+.egg-title-text {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.egg-message-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* 16. CONTENT CONFIGURATOR PORTAL */
+.config-portal {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 4, 26, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.config-portal:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.config-content {
+    max-width: 750px;
+    width: 100%;
+    height: 85vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.config-close {
+    color: var(--text-muted);
+}
+
+.config-content h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.2rem;
+}
+
+.config-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+/* Config Tabs */
+.config-tabs {
+    display: flex;
+    gap: 0.4rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.config-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: inherit;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab-btn.active {
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--accent-color);
+}
+
+/* Tab Panels */
+.tab-panels {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    padding-right: 0.5rem;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.tab-panel h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.tab-help {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.inputs-scroll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Form controls inside configurator */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+:root[data-theme="light"] .form-control {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+}
+
+.textarea-reason {
+    resize: none;
+    height: 4.5rem;
+}
+
+.config-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid var(--card-border);
+    padding-top: 1rem;
+}
+
+/* Helper utilities */
+.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 17. Responsive adjustments */
+@media (max-width: 768px) {
+    .floating-controls {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+    }
+    
+    .music-btn { order: 2; }
+    .theme-btn { order: 1; }
+    .config-btn { order: 3; }
+
+    .hero-title { font-size: 2.4rem; }
+    .hero-subtitle { font-size: 1.1rem; }
+
+    .main-content {
+        padding: 3rem 1rem;
+    }
+
+    .timeline-nav {
+        margin: 1.5rem 0 0.5rem 0;
+    }
+    
+    .timeline-line {
+        top: 1rem;
+    }
+    
+    .step-num {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .step-title {
+        display: none; /* Hide titles on small screens */
+    }
+
+    .gallery-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .photobooth-container {
+        max-width: 320px;
+        margin: 0 auto 1.5rem auto;
+        transform: rotate(0);
+    }
+
+    .polaroids-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    
+    .polaroid-card {
+        padding: 0.8rem 0.8rem 1.4rem 0.8rem;
+    }
+    
+    .polaroid-caption {
+        font-size: 1.25rem;
+    }
+
+    .quiz-container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .quiz-q-text {
+        font-size: 1.2rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+
+    .card-container {
+        height: 150px;
+    }
+
+    .card-back-message {
+        font-size: 1.25rem;
+    }
+
+    .envelopes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .envelope-wrapper {
+        height: 150px;
+    }
+
+    .envelope-flap {
+        border-left-width: 80px;
+        border-right-width: 80px;
+        border-top-width: 55px;
+    }
+
+    .config-content {
+        height: 95vh;
+        padding: 1.5rem;
+    }
+    
+    .config-tabs {
+        gap: 0.2rem;
+    }
+    
+    .tab-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title { font-size: 1.9rem; }
+    .glowing-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+
+    .cake-container {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .cake-plate {
+        width: 230px;
+        left: -15px;
+    }
+    
+    .cake-body-bottom {
+        width: 160px;
+        left: 20px;
+    }
+    
+    .cake-body-top {
+        width: 120px;
+        left: 40px;
+    }
+    
+    .cake-frosting {
+        width: 170px;
+        left: 15px;
+    }
+    
+    .candles-row {
+        bottom: 165px;
+        left: 45px;
+        width: 110px;
+    }
+
+    .typewriter-area {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .final-climax-card {
+        padding: 2rem 1.2rem;
+    }
+}

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A beautiful interactive scrapbook journey celebrating our days. Happy Birthday my king ❤️!">
+    <title>Our Journey ❤️</title>
+    <!-- Google Fonts: Quicksand for soft, elegant rounded styling; Caveat for handwritten annotations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. Initial Loading Screen -->
+    <div id="loading-screen" class="loading-screen" role="dialog" aria-modal="true">
+        <div class="loader-content">
+            <div class="heart-loader" aria-hidden="true">💖</div>
+            <p class="loader-text">Preparing something made especially for you meri sasu ma(meri mummy)ko beta...</p>
+        </div>
+    </div>
+
+    <!-- Background Particle Canvas -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Floating Global Actions -->
+    <div class="floating-controls" aria-label="Controls">
+        <button id="music-toggle" class="floating-btn music-btn" aria-label="Toggle background music">
+            <span class="music-icon">🎵</span>
+            <span class="music-tooltip">Play Music</span>
+        </button>
+        <button id="theme-toggle" class="floating-btn theme-btn" aria-label="Toggle dark/light mode">
+            <span class="theme-icon">🌙</span>
+            <span class="theme-tooltip">Dark Mode</span>
+        </button>
+        <button id="config-toggle" class="floating-btn config-btn" aria-label="Open scrapbook configurator">
+            <span class="config-icon">⚙️</span>
+            <span class="music-tooltip">Edit Content</span>
+        </button>
+    </div>
+
+    <!-- Hidden Easter Eggs (3 tiny hearts scattered off-screen/in subtle areas) -->
+    <button id="easter-egg-1" class="easter-egg-heart" style="top: 15%; left: 3%;" aria-label="Hidden heart easter egg 1">❤️</button>
+    <button id="easter-egg-2" class="easter-egg-heart" style="top: 85%; right: 4%;" aria-label="Hidden heart easter egg 2">❤️</button>
+    <button id="easter-egg-3" class="easter-egg-heart" style="bottom: 12%; left: 8%;" aria-label="Hidden heart easter egg 3">❤️</button>
+
+    <!-- 2. Hero Landing Page -->
+    <header class="hero-section" id="hero-section">
+        <div class="hero-content glass-card">
+            <div class="hero-heart-pulse" aria-hidden="true">💝</div>
+            <h1 class="hero-title">Happy Birthday! darling ding ding❤️... ❤️</h1>
+            <p class="hero-subtitle">Today isn't just your birthday...<br>It's a celebration of someone who means the world to me.</p>
+            <button id="open-btn" class="glowing-btn">
+                <span>🎁 Open Your Surprise</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 3. Main Scrapbook Content (Initially Hidden) -->
+    <main id="main-content" class="main-content hidden">
+
+        <!-- Scrapbook Dashboard Cover -->
+        <section class="scrapbook-cover glass-card">
+            <div class="cover-header">
+                <h2>Our Scrapbook</h2>
+                <p class="counter-text">We have been known for: <span id="friendship-counter" class="counter-val">Loading...</span></p>
+            </div>
+            
+            <!-- Timeline Navigation Tracker -->
+            <nav class="timeline-nav" aria-label="Scrapbook chapters timeline">
+                <div class="timeline-line"></div>
+                <ul class="timeline-steps">
+                    <li class="timeline-step active" data-chapter="1" id="nav-ch-1">
+                        <button class="step-btn" aria-label="Go to Chapter 1: Guess Who">
+                            <span class="step-num">1</span>
+                            <span class="step-title">Guess Who?</span>
+                        </button>
+                    </li>
+                    <li class="timeline-step locked" data-chapter="2" id="nav-ch-2">
+                        <button class="step-btn" aria-label="Go to Chapter 2: Memory Gallery" disabled>
+                            <span class="step-num">🔒</span>
+                            <span class="step-title">Gallery</span>
+                        </button>
+                    </li>
+                    <li class="timeline-step locked" data-chapter="3" id="nav-ch-3">
+                        <button class="step-btn" aria-label="Go to Chapter 3: Quiz On Us" disabled>
+                            <span class="step-num">🔒</span>
+                            <span class="step-title">Quiz</span>
+                        </button>
+                    </li>
+                    <li class="timeline-step locked" data-chapter="4" id="nav-ch-4">
+                        <button class="step-btn" aria-label="Go to Chapter 4: Reasons Why" disabled>
+                            <span class="step-num">🔒</span>
+                            <span class="step-title">Reasons</span>
+                        </button>
+                    </li>
+                    <li class="timeline-step locked" data-chapter="5" id="nav-ch-5">
+                        <button class="step-btn" aria-label="Go to Chapter 5: Letters" disabled>
+                            <span class="step-num">🔒</span>
+                            <span class="step-title">Letters</span>
+                        </button>
+                    </li>
+                    <li class="timeline-step locked" data-chapter="6" id="nav-ch-6">
+                        <button class="step-btn" aria-label="Go to Chapter 6: Final Climax" disabled>
+                            <span class="step-num">🔒</span>
+                            <span class="step-title">Cake Climax</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="awards-row">
+                <span class="award-pill">🏅 Best Listener</span>
+                <span class="award-pill">🌍 Adventure Partner</span>
+                <span class="award-pill">😂 CEO of Laughs</span>
+            </div>
+        </section>
+
+        <!-- Chapter Sections Container -->
+        <div class="chapters-container">
+
+            <!-- CHAPTER 1: GUESS WHO? -->
+            <section id="chapter-1" class="chapter-pane active">
+                <div class="chapter-header">
+                    <span class="chapter-index">Chapter 1</span>
+                    <h3>Guess Who?</h3>
+                    <p class="chapter-desc">Do you remember these moments? Guess who is in the photo before revealing!</p>
+                </div>
+                
+                <div class="guess-who-widget glass-card">
+                    <div class="guess-photo-frame">
+                        <img id="guess-image" src="" alt="Childhood photo to guess" class="blurred-image">
+                        <!-- Image Fallback Container -->
+                        <div class="img-placeholder hidden" id="guess-image-fallback">
+                            <span class="placeholder-icon">📸</span>
+                            <span class="placeholder-text">image: "images/guess_1.webp",</span>
+                        </div>
+                    </div>
+                    <div class="guess-controls">
+                        <p id="guess-question" class="guess-prompt-text">Loading question...</p>
+                        <p id="guess-caption" class="guess-caption-text hidden">Loading caption...</p>
+                        
+                        <div class="guess-buttons">
+                            <button id="guess-reveal-btn" class="glowing-btn"><span>🔍 Reveal Photo</span></button>
+                            <button id="guess-next-btn" class="secondary-btn hidden"><span>Next Photo ➡️</span></button>
+                        </div>
+                    </div>
+                    
+                    <div class="widget-progress">
+                        <span id="guess-progress-text">Photo 1 of 3</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER 2: MEMORY GALLERY -->
+            <section id="chapter-2" class="chapter-pane hidden">
+                <div class="chapter-header">
+                    <span class="chapter-index">Chapter 2</span>
+                    <h3>Memory Gallery</h3>
+                    <p class="chapter-desc">Our Polaroid scrapbook. Click any photo to unfold the story and download a keepsake!</p>
+                </div>
+
+              <div class="gallery-layout">
+                    <!-- Photo Booth Strip -->
+                    <div class="photobooth-container glass-card">
+                        <h4 class="photobooth-title">📸 Photo Booth Print</h4>
+                        <div class="photobooth-strip">
+                            <div class="strip-item"><img src="images/guess_1.webp" alt="Strip 1" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"><div class="img-placeholder hidden"><span class="placeholder-icon">❤️</span></div></div>
+                            <div class="strip-item"><img src="images/guess_2.webp" alt="Strip 2" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"><div class="img-placeholder hidden"><span class="placeholder-icon">🌸</span></div></div>
+                            <div class="strip-item"><img src="images/guess_3.webp" alt="Strip 3" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"><div class="img-placeholder hidden"><span class="placeholder-icon">🌟</span></div></div>
+                            <div class="strip-item"><img src="images/memory_1.webp" alt="Strip 4" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')"><div class="img-placeholder hidden"><span class="placeholder-icon">🎂</span></div></div>
+                        </div>
+                        <div class="photobooth-marker"> Forever</div>
+                    </div>
+
+                    <!-- Polaroids Grid -->
+                    <div class="polaroids-grid" id="polaroids-grid">
+                        <!-- Injected by JS -->
+                    </div>
+</div>
+
+                    <!-- Polaroids Grid -->
+                    <div class="polaroids-grid" id="polaroids-grid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Custom digital scratch card coupon placed here inside the gallery! -->
+                <div class="scratch-card-promo glass-card">
+                    <div class="promo-text-side">
+                        <h4>🎟️ Birthday Scratch-Off</h4>
+                        <p>I have a special mystery gift for you. Rub the ticket to reveal it!</p>
+                    </div>
+                    <button id="open-scratch-btn" class="glowing-btn"><span>Scratch Ticket 🍀</span></button>
+                </div>
+
+                <div class="section-footer">
+                    <button id="ch2-complete-btn" class="glowing-btn"><span>Proceed to Chapter 3 🔒</span></button>
+                </div>
+            </section>
+
+            <!-- CHAPTER 3: QUIZ ON US -->
+            <section id="chapter-3" class="chapter-pane hidden">
+                <div class="chapter-header">
+                    <span class="chapter-index">Chapter 3</span>
+                    <h3>Quiz On Us</h3>
+                    <p class="chapter-desc">Let's see how well you know our hilarious friendship dynamic!</p>
+                </div>
+
+                <div class="quiz-container glass-card">
+                    <div id="quiz-question-box">
+                        <h4 id="quiz-question-num" class="quiz-q-num">Question 1 of 5</h4>
+                        <p id="quiz-question-text" class="quiz-q-text">Who always replies to text messages late?</p>
+                        
+                        <div class="quiz-options" id="quiz-options-grid">
+                            <!-- JS will inject buttons -->
+                        </div>
+                        
+                        <div id="quiz-feedback-box" class="quiz-feedback hidden">
+                            <p id="quiz-feedback-text">Incorrect!</p>
+                            <button id="quiz-next-btn-panel" class="secondary-btn"><span>Next Question ➡️</span></button>
+                        </div>
+                    </div>
+
+                    <div id="quiz-score-box" class="quiz-score-view hidden">
+                        <div class="score-stars">⭐⭐⭐</div>
+                        <h4>Quiz Complete!</h4>
+                        <p class="quiz-congrats-text">You know us pretty well! ❤️</p>
+                        <button id="ch3-complete-btn" class="glowing-btn"><span>Proceed to Chapter 4 🔒</span></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAPTER 4: WHY YOU'RE AMAZING -->
+            <section id="chapter-4" class="chapter-pane hidden">
+                <div class="chapter-header">
+                    <span class="chapter-index">Chapter 4</span>
+                    <h3>Why You're Amazing</h3>
+                    <p class="chapter-desc">Flip all 30 cards to read why you are so special to me. Click "Reveal All" if you want to flip them all together!</p>
+                </div>
+
+                <div class="grid-controls glass-card">
+                    <div class="grid-progress-bar-wrapper">
+                        <div class="progress-details">
+                            <span class="progress-label">Flipped Reasons</span>
+                            <span id="reasons-progress-text" class="progress-value">0 of 30 cards opened</span>
+                        </div>
+                        <div class="grid-progress-track">
+                            <div id="reasons-progress-bar" class="grid-progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <button id="reasons-reveal-all" class="secondary-btn"><span>✨ Reveal All</span></button>
+                </div>
+
+                <div class="cards-grid" id="reasons-grid">
+                    <!-- JS will inject 30 cards -->
+                </div>
+
+                <div class="section-footer">
+                    <button id="ch4-complete-btn" class="glowing-btn" disabled><span>Proceed to Chapter 5 🔒</span></button>
+                </div>
+            </section>
+
+            <!-- CHAPTER 5: SECRET MESSAGES -->
+            <section id="chapter-5" class="chapter-pane hidden">
+                <div class="chapter-header">
+                    <span class="chapter-index">Chapter 5</span>
+                    <h3>Secret Letters</h3>
+                    <p class="chapter-desc">Open the envelopes below to unfold four special, handwritten letters made just for you.</p>
+                </div>
+
+                <div class="envelopes-grid" id="envelopes-grid">
+                    <!-- Injected by JS -->
+                </div>
+
+                <div class="section-footer">
+                    <button id="ch5-complete-btn" class="glowing-btn" disabled><span>Proceed to Chapter 6 🔒</span></button>
+                </div>
+            </section>
+
+            <!-- CHAPTER 6: FINAL SURPRISE -->
+            <section id="chapter-6" class="chapter-pane hidden">
+                <div class="chapter-header">
+                    <span class="chapter-index">Chapter 6</span>
+                    <h3>The Birthday Cake Climax</h3>
+                    <p class="chapter-desc">A special birthday wish. Blow out all the candles to unlock the final emotional message!</p>
+                </div>
+
+                <div class="cake-arena glass-card">
+                    <!-- Interactive Cake -->
+                    <div class="cake-container">
+                        <div class="cake-plate"></div>
+                        <div class="cake-body-bottom"></div>
+                        <div class="cake-body-top"></div>
+                        <div class="cake-frosting"></div>
+                        <div class="candles-row" id="candles-row">
+                            <!-- 3 Candles -->
+                            <div class="candle" id="candle-1" role="button" tabindex="0" aria-label="Birthday candle 1. Click to blow out.">
+                                <div class="flame glow"></div>
+                                <div class="wick"></div>
+                                <div class="candle-stick color-1"></div>
+                            </div>
+                            <div class="candle" id="candle-2" role="button" tabindex="0" aria-label="Birthday candle 2. Click to blow out.">
+                                <div class="flame glow"></div>
+                                <div class="wick"></div>
+                                <div class="candle-stick color-2"></div>
+                            </div>
+                            <div class="candle" id="candle-3" role="button" tabindex="0" aria-label="Birthday candle 3. Click to blow out.">
+                                <div class="flame glow"></div>
+                                <div class="wick"></div>
+                                <div class="candle-stick color-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cake-instructions">
+                        <p id="cake-instruction-text">🕯️ Click on each candle to blow it out!</p>
+                    </div>
+                </div>
+
+                <!-- Final Typing letter sheet (Initially Hidden, appears after candles are out) -->
+                <div class="final-climax-card glass-card hidden" id="final-climax-card">
+                    <h2 class="climax-header">HAPPY BIRTHDAY!meri gulab jamun 🎂💖</h2>
+                    <div class="typewriter-area">
+                        <p id="climax-typewriter-text"></p>
+                    </div>
+                    <div class="climax-sparkles-accent">✨💖✨</div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ==========================================
+    MODALS AND DIALOGS
+    ========================================== -->
+
+    <!-- Polaroid Lightbox Overlay -->
+    <div id="lightbox-modal" class="lightbox-modal hidden" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+        <button class="lightbox-close" id="lightbox-close-btn" aria-label="Close image view">&times;</button>
+        <div class="lightbox-content">
+            <!-- Simulated Canvas Polaroid printable card -->
+            <div class="polaroid-keepsake glass-card" id="polaroid-keepsake-card">
+                <div class="keepsake-image-wrapper">
+                    <img id="lightbox-img" src="" alt="Enlarged Memory">
+                </div>
+                <div class="keepsake-meta">
+                    <span id="lightbox-location" class="keepsake-location"></span>
+                    <p id="lightbox-caption" class="keepsake-caption"></p>
+                    <p id="lightbox-handwritten" class="keepsake-note"></p>
+                </div>
+            </div>
+            <div class="keepsake-actions">
+                <button id="download-keepsake-btn" class="glowing-btn"><span>📥 Download Polaroid Keepsake</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Envelope Letter Modal -->
+    <div id="letter-modal" class="letter-modal hidden" role="dialog" aria-modal="true" aria-labelledby="letter-modal-title">
+        <div class="letter-paper glass-card">
+            <button class="letter-close" id="letter-close-btn" aria-label="Close letter">&times;</button>
+            <h4 id="letter-modal-subject" class="letter-subject"></h4>
+            <h3 id="letter-modal-title" class="letter-title"></h3>
+            <p id="letter-modal-body" class="letter-body"></p>
+            <div class="letter-signature">Forever ❤️</div>
+        </div>
+    </div>
+
+    <!-- Scratch Card Modal -->
+    <div id="scratch-modal" class="scratch-modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="scratch-card-box glass-card">
+            <button class="scratch-close" id="scratch-close-btn" aria-label="Close scratch card">&times;</button>
+            <h3 id="scratch-title">🎟️ Birthday Scratch Card</h3>
+            <p id="scratch-instruction">Scratch the silver foil with your mouse/touch to reveal your gift!</p>
+            
+            <div class="scratch-canvas-container">
+                <!-- Underneath hidden text -->
+                <div class="scratch-secret-text" id="scratch-secret-text">
+                    <div class="coupon-banner">🎉 CONGRATULATIONS! 🎉</div>
+                    <p id="scratch-coupon-code">FREE DINNER ON ME 🍕🍔</p>
+                    <p class="coupon-sub">Valid anytime! Show this to claim.</p>
+                </div>
+                <!-- Scratch Canvas Layer -->
+                <canvas id="scratch-canvas" width="280" height="150"></canvas>
+            </div>
+            
+            <div class="scratch-actions">
+                <button id="scratch-done-btn" class="glowing-btn hidden"><span>Claim Surprise ✨</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Easter Egg Popup Drawer -->
+    <div id="egg-modal" class="egg-modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="egg-card glass-card">
+            <button class="egg-close" id="egg-close-btn" aria-label="Close surprise">&times;</button>
+            <div class="egg-icon" id="egg-icon">💖</div>
+            <h3 id="egg-title" class="egg-title-text">Easter Egg Found!</h3>
+            <p id="egg-message" class="egg-message-text">Silly memories...</p>
+        </div>
+    </div>
+
+    <!-- 4. Content Configurator Portal Modal -->
+    <div id="config-portal" class="config-portal hidden" role="dialog" aria-modal="true" aria-labelledby="config-title">
+        <div class="config-content glass-card">
+            <button class="config-close" id="config-close-btn" aria-label="Close config editor">&times;</button>
+            <h3 id="config-title">🛠️ Scrapbook Builder</h3>
+            <p class="config-desc">Change the appreciation messages, quotes, quiz questions, and letters. Your changes update the layout in real-time. Export the configuration file to deploy it!</p>
+            
+            <!-- Config Tabs -->
+            <div class="config-tabs">
+                <button class="tab-btn active" data-tab="tab-reasons">Reasons (30)</button>
+                <button class="tab-btn" data-tab="tab-letters">Letters (4)</button>
+                <button class="tab-btn" data-tab="tab-quiz">Quiz</button>
+                <button class="tab-btn" data-tab="tab-details">General Details</button>
+            </div>
+
+            <!-- Tab Panels -->
+            <div class="tab-panels">
+                <!-- Tab Reasons -->
+                <div id="tab-reasons" class="tab-panel active">
+                    <h4>30 Reasons Why You're Appreciated</h4>
+                    <p class="tab-help">Provide exactly 30 lines. These will fill the Chapter 4 grid.</p>
+                    <div class="inputs-scroll-list" id="config-reasons-inputs">
+                        <!-- dynamically generated textareas -->
+                    </div>
+                </div>
+
+                <!-- Tab Letters -->
+                <div id="tab-letters" class="tab-panel">
+                    <h4>4 Envelope Messages</h4>
+                    <div id="config-letters-inputs">
+                        <!-- dynamic letter fields -->
+                    </div>
+                </div>
+
+                <!-- Tab Quiz -->
+                <div id="tab-quiz" class="tab-panel">
+                    <h4>Quiz Questions Builder</h4>
+                    <div id="config-quiz-inputs" class="inputs-scroll-list">
+                        <!-- dynamic quiz forms -->
+                    </div>
+                </div>
+
+                <!-- Tab General Details -->
+                <div id="tab-details" class="tab-panel">
+                    <h4>General Options</h4>
+                    <div class="form-group">
+                        <label for="config-start-date">Friendship Start Date (for counter):</label>
+                        <input type="date" id="config-start-date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="config-climax-text">Final Climax Scroll Text:</label>
+                        <textarea id="config-climax-text" class="form-control" rows="8"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="config-scratch-text">Scratch Card Revealed Prize:</label>
+                        <input type="text" id="config-scratch-text" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Config Footer actions -->
+            <div class="config-actions">
+                <button id="config-apply-btn" class="secondary-btn"><span>🔄 Apply Locally</span></button>
+                <button id="config-export-btn" class="glowing-btn"><span>📥 Export config.js File</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configs and main scripts -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
